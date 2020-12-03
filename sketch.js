@@ -18,9 +18,9 @@ function setup() {
 
   foodObj=new Food()
 
-  dog=createSprite(720,200,10,10)
+  dog=createSprite(710,190,10,10)
   dog.addImage(happyDog)
-  dog.scale = 0.2
+  dog.scale = 0.3
 
   feed=createButton("Feed the dog")
   feed.position(700,95)
@@ -35,9 +35,9 @@ function setup() {
 function draw() { 
   background (46, 139, 87) 
 
-  fedTime=database.ref('FeedTime')
-  fedTime.on("value",function(data){
-    Feedtime=data.val()
+  feedTime=database.ref('FeedTime')
+  feedTime.on("value",function(data){
+   LastFed=data.val()
   })
 
   foodObj.display()   
@@ -46,14 +46,16 @@ function draw() {
   fill("black")
   textSize(30)
 
-  if (hour()>12 && hour()<23){
-  pm = hour()-12
-  text("last fed: "+pm + " PM",600,75)
+  text("press Feed the dog  to feed the dog ",100,450)
+
+  if (LastFed>12 &&LastFed<23){
+  pm =LastFed-12
+  text("last fed: "+pm + " PM",100,75)
   }
 
  else{
 
-    text("last fed: "+FeedTime + " PM",600,75)
+    text("last fed: "+LastFed + " AM",100,75)
     }
   
 }
@@ -62,6 +64,7 @@ function feedDog(){
   if(foodStock!=0){
   foodStock=foodStock-1
   console.log(foodStock)
+  
   database.ref('/').update({
     food:foodStock,
     FeedTime:hour()
